@@ -1,0 +1,11 @@
+{
+  "name": "color-detector",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Phone-camera colour detector for the Klil aluminium colour fan",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8080"
+  }
+}

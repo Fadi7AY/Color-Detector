@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14171a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Color Detector</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1 data-t="appTitle"></h1>
+      <p data-t="appSub"></p>
+    </div>
+    <button id="lang" class="chip-btn" type="button" aria-label="Language">EN</button>
+  </header>
+
+  <main>
+    <!-- Scan -->
+    <section id="view-scan" class="view">
+      <div id="viewport" class="viewport">
+        <video id="video" playsinline muted autoplay></video>
+        <canvas id="still" hidden></canvas>
+        <div id="reticle" class="reticle" aria-hidden="true"></div>
+        <div id="still-hint" class="vp-hint" data-t="tapToSample" hidden></div>
+        <div class="vp-tools">
+          <button id="torch" class="vp-btn" type="button" hidden data-t="torch"></button>
+          <button id="photo" class="vp-btn" type="button" data-t="usePhoto"></button>
+          <button id="live" class="vp-btn" type="button" hidden data-t="liveCamera"></button>
+        </div>
+        <div id="cam-overlay" class="cam-overlay" hidden>
+          <p id="cam-msg"></p>
+          <button id="cam-start" class="btn primary" type="button" data-t="startCamera"></button>
+        </div>
+        <input id="file" type="file" accept="image/*" hidden>
+      </div>
+
+      <div class="panel">
+        <button id="cal-chip" class="status" type="button"></button>
+        <p id="warn" class="warn" hidden></p>
+
+        <div class="result" id="result" hidden>
+          <div class="result-head">
+            <span class="label" data-t="bestMatch"></span>
+            <span id="conf" class="conf"></span>
+          </div>
+          <div class="best">
+            <div class="pair">
+              <div id="best-swatch" class="swatch big"></div>
+              <div id="measured-swatch" class="swatch big"></div>
+            </div>
+            <div class="best-text">
+              <div id="best-code" class="code"></div>
+              <div id="best-name" class="name"></div>
+              <div id="best-sub" class="sub"></div>
+            </div>
+            <div class="de"><span id="best-de"></span><small>ΔE</small></div>
+          </div>
+          <div class="pair-legend">
+            <span data-t="tabCatalog"></span>
+            <span><span data-t="measured"></span> <code id="measured-hex"></code></span>
+          </div>
+          <p id="note" class="note" hidden></p>
+
+          <div class="label alt-label" data-t="alternatives"></div>
+          <ul id="alts" class="rows"></ul>
+          <button id="teach" class="link" type="button" data-t="teach"></button>
+        </div>
+        <p id="empty" class="muted" data-t="noReading"></p>
+      </div>
+
+      <div class="actions">
+        <button id="calibrate" class="btn" type="button" data-t="calibrate"></button>
+        <button id="hold" class="btn" type="button" data-t="hold"></button>
+        <button id="save" class="btn primary" type="button" data-t="save"></button>
+      </div>
+    </section>
+
+    <!-- Catalog -->
+    <section id="view-catalog" class="view" hidden>
+      <div class="pad">
+        <input id="search" class="search" type="search" autocomplete="off" data-t-ph="search">
+        <div id="catalog"></div>
+      </div>
+    </section>
+
+    <!-- History -->
+    <section id="view-history" class="view" hidden>
+      <div class="pad">
+        <div class="bar">
+          <button id="export" class="btn small" type="button" data-t="exportCsv"></button>
+          <button id="clear-history" class="btn small danger" type="button" data-t="clearHistory"></button>
+        </div>
+        <p id="history-empty" class="muted" data-t="historyEmpty"></p>
+        <ul id="history" class="rows"></ul>
+      </div>
+    </section>
+
+    <!-- Settings -->
+    <section id="view-settings" class="view" hidden>
+      <div class="pad">
+        <h2 data-t="calibration"></h2>
+        <p id="set-cal" class="muted"></p>
+        <p id="set-lock" class="muted"></p>
+        <button id="reset-cal" class="btn small" type="button" data-t="resetCal"></button>
+
+        <h2 data-t="learned"></h2>
+        <p id="set-learned" class="muted"></p>
+        <button id="clear-learned" class="btn small danger" type="button" data-t="clearLearned"></button>
+
+        <h2 data-t="howTitle"></h2>
+        <ol class="how">
+          <li data-t="how1"></li>
+          <li data-t="how2"></li>
+          <li data-t="how3"></li>
+          <li data-t="how4"></li>
+          <li data-t="how5"></li>
+        </ol>
+        <p class="disclaimer" data-t="disclaimer"></p>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabs">
+    <button type="button" data-view="scan" class="active" data-t="tabScan"></button>
+    <button type="button" data-view="catalog" data-t="tabCatalog"></button>
+    <button type="button" data-view="history" data-t="tabHistory"></button>
+    <button type="button" data-view="settings" data-t="tabSettings"></button>
+  </nav>
+
+  <dialog id="dlg-cal">
+    <h2 data-t="calTitle"></h2>
+    <p data-t="calBody"></p>
+    <div class="dlg-actions">
+      <button class="btn" type="button" data-close data-t="cancel"></button>
+      <button id="cal-go" class="btn primary" type="button" data-t="calGo"></button>
+    </div>
+  </dialog>
+
+  <dialog id="dlg-teach">
+    <h2 data-t="teachTitle"></h2>
+    <p class="muted" data-t="teachBody"></p>
+    <ul id="teach-list" class="rows scroll"></ul>
+    <div class="dlg-actions">
+      <button class="btn" type="button" data-close data-t="cancel"></button>
+    </div>
+  </dialog>
+
+  <dialog id="dlg-color">
+    <div id="detail"></div>
+    <div class="dlg-actions">
+      <button id="forget" class="btn danger" type="button" data-t="forget" hidden></button>
+      <button class="btn" type="button" data-close data-t="close"></button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
