@@ -11,6 +11,18 @@ Home Screen" so it runs full-screen and offline. Hebrew and English UI.
 > Unofficial. Not affiliated with Klil. See [Accuracy](#accuracy) before
 > relying on it.
 
+## At a glance
+
+```mermaid
+flowchart LR
+    White["Calibrate with white paper"] --> Scan["Camera or photo sample"]
+    Scan --> Match["Rank closest shades"]
+    Match --> Save["Hold · save · export CSV"]
+    Match --> Teach["Teach from a known physical sample"]
+    Teach --> Scan
+```
+
+
 ## Using it
 
 1. **Calibrate** – tap *Calibrate white*, fill the square with white paper in
